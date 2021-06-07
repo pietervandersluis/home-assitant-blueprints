@@ -25,6 +25,16 @@ blueprint:
         target:
           entity:
             domain: light
+    light_color_name:
+      name: Light
+      description: Name of the light you prefer to turn on. E.g. light.garbage
+      default: light.garbage
+      select:
+        options:
+          - Red
+          - Blue
+          - Green
+          - Yellow
     garbage_sensor:
       name: Garbage sensor
       description: Sensor should have a value like YYYY-MM-DD
@@ -45,3 +55,7 @@ condition:
 action:
   service: light.turn_on
   target: !input light
+  data:
+    brightness: 255
+    color_name: !input light_color_name
+    
