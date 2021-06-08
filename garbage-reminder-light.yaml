@@ -27,7 +27,7 @@ blueprint:
     light_color_name:
       name: Color name
       description: Color of the light you prefer. E.g. Red
-      default: light.garbage
+      default: Red
       selector:
         select:
           options:
