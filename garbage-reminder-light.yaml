@@ -46,13 +46,14 @@ blueprint:
 variables:
   garbage_sensor: !input 'garbage_sensor'
   day_offset: !input 'day_offset'
-  sensors_tomorrow: '{{ [(state_attr(garbage_sensor, ''friendly_name''), states(garbage_sensor))] | selectattr(''1'', ''eq'', (now() + timedelta(days = day_offset | int)).strftime(''%Y-%m-%d'')) | join('', '',  attribute=0) }}'
+  sensors_tomorrow: "{{ states(garbage_sensor) == (now() + timedelta(days = day_offset | int)).strftime('%Y-%m-%d') }}"
+
 trigger:
   platform: time
   at: !input 'reminder_time'
 condition:
   condition: template
-  value_template: "{{ sensors_tomorrow != '' }}"
+  value_template: "{{ sensors_tomorrow }}"
 action:
   service: light.turn_on
   target: !input light
