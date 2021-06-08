@@ -22,9 +22,8 @@ blueprint:
       description: Name of the light you prefer to turn on. E.g. light.garbage
       default: light.garbage
       selector:
-        target:
-          entity:
-            domain: light
+        entity:
+          domain: light
     light_color_name:
       name: Color name
       description: Color of the light you prefer. E.g. Red
