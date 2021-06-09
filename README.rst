@@ -9,4 +9,7 @@ Apply locally
 
 ..  code-block::
 
-    rsync --delete --exclude .git --exclude .vscode -avc ./ kubernetes-node:/opt/kubernetes_host_path/ha-v2/config/blueprints/automation/pietervandersluis/ 
+    TARGET_HOST='Hello world'
+    TARGET_PATH='Hello path'
+    rsync --delete --exclude .git --exclude .vscode -avc ./ ${TARGET_HOST}:${TARGET_PATH} 
+    
