@@ -19,11 +19,10 @@ blueprint:
       default: 1
     light:
       name: Light
-      description: Name of the light you prefer to turn on. E.g. light.garbage
-      default: light.garbage
       selector:
-        entity:
-          domain: light
+        target:
+          entity:
+            domain: light
     light_color_name:
       name: Color name
       description: Color of the light you prefer. E.g. Red
@@ -46,13 +45,12 @@ variables:
   garbage_sensor: !input 'garbage_sensor'
   day_offset: !input 'day_offset'
   sensors_tomorrow: "{{ states(garbage_sensor) == (now() + timedelta(days = day_offset | int)).strftime('%Y-%m-%d') }}"
-
 trigger:
   platform: time
   at: !input 'reminder_time'
 condition:
   condition: template
-  value_template: "{{ sensors_tomorrow }}"
+  value_template: '{{ sensors_tomorrow }}'
 action:
   service: light.turn_on
   target: !input light
