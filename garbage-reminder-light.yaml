@@ -1,0 +1,59 @@
+# Based on the work of: westenberg
+# URL: https://community.home-assistant.io/t/garbage-reminder/284213
+
+---
+blueprint:
+  name: Garbage reminder light
+  domain: automation
+  input:
+    reminder_time:
+      name: Reminder time
+      description: At what time the day before do you want to be reminded
+      selector:
+        time: {}
+    day_offset:
+      name: Day offset
+      description: Amount of days to be added to the triggers date to check for sensor
+        value matches. E.g. 1 to be notified the day before or 0 for notification
+        on the garbage collection day.
+      default: 1
+    light:
+      name: Light
+      selector:
+        target:
+          entity:
+            domain: light
+    light_color_name:
+      name: Color name
+      description: Color of the light you prefer. E.g. Red
+      default: Red
+      selector:
+        select:
+          options:
+            - Red
+            - Blue
+            - Green
+            - Yellow
+    garbage_sensor:
+      name: Garbage sensor
+      description: Sensor should have a value like YYYY-MM-DD
+      selector:
+        entity:
+          domain: sensor
+
+variables:
+  garbage_sensor: !input 'garbage_sensor'
+  day_offset: !input 'day_offset'
+  sensors_tomorrow: "{{ states(garbage_sensor) == (now() + timedelta(days = day_offset | int)).strftime('%Y-%m-%d') }}"
+trigger:
+  platform: time
+  at: !input 'reminder_time'
+condition:
+  condition: template
+  value_template: '{{ sensors_tomorrow }}'
+action:
+  service: light.turn_on
+  target: !input light
+  data:
+    brightness: 255
+    color_name: !input light_color_name
